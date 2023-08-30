@@ -1,0 +1,15 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      - echo "Installing Maven..."
+      - mvn --version
+  build:
+    commands:
+      - echo "Building the Java Maven project..."
+      - mvn clean install
+artifacts:
+  files: '**/*'
