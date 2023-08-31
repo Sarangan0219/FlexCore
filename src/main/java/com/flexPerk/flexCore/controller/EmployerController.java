@@ -56,4 +56,10 @@ public class EmployerController {
         employerService.registerEmployer(employer);
         return ResponseEntity.ok("Employer " + employer.getName() + " registered");
     }
+
+    @GetMapping(path = "employer/{employerId}/employee/{employeeId}")
+    public void getRegistrationLink( @PathVariable("employerId") long employerId,
+                                     @PathVariable("employeeId") long employeeId) {
+        employerService.sendSelfRegistrationLink(employerId, employeeId);
+    }
 }

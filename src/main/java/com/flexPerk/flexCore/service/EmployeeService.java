@@ -4,6 +4,7 @@ import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.Employee;
 import com.flexPerk.flexCore.model.Employer;
 import com.flexPerk.flexCore.repository.EmployeeRepository;
+import com.flexPerk.flexCore.utils.EmployeeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,12 +55,11 @@ public class EmployeeService {
         }
     }
 
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(long employerId, long employeeId, Employee employee) {
         if (employee != null) {
-            long employeeId = employee.getEmployeeID();
             Employee existingEmployee = employeeRepository.findById(employeeId).orElse(null);
             if (existingEmployee != null) {
-                existingEmployee.setName(employee.getName());
+                existingEmployee.setFirstName(employee.getFirstName());
                 existingEmployee.setEmail(employee.getEmail());
                 return employeeRepository.save(existingEmployee);
             } else {
@@ -74,6 +74,8 @@ public class EmployeeService {
         Employer employer = employerService.getEmployer(employerId);
         if (employer != null) {
             if (employee != null) {
+                employee.setEmployer(employer);
+                EmployeeUtils.isEmployeeEmailValid(employer.getContactPersonEmail(), employee.getEmail());
                 employeeRepository.save(employee);
             } else {
                 throw new NotFoundException("Employee with ID: " + employerId + " not found in Employer with ID " +

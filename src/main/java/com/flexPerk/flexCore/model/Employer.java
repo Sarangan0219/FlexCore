@@ -16,16 +16,40 @@ public class Employer {
     private String contactPersonName;
     private String contactPersonEmail;
     private String contactPersonPhone;
+    private String address;
+    private int companySize;
+    private String url;
+    private String description;
 
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCompanySize(int companySize) {
+        this.companySize = companySize;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     // Constructors
-    public Employer(String name, String contactPersonName, String contactPersonEmail, String contactPersonPhone) {
+    public Employer(String name, String contactPersonName, String contactPersonEmail, String contactPersonPhone,
+                    String address, int companySize, String url, String description) {
         this.name = name;
         this.contactPersonName = contactPersonName;
         this.contactPersonEmail = contactPersonEmail;
         this.contactPersonPhone = contactPersonPhone;
+        this.address = address;
+        this.companySize = companySize;
+        this.url = url;
+        this.description = description;
     }
-
     public Employer() {
 
     }
@@ -38,9 +62,6 @@ public class Employer {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getContactPersonName() {
         return contactPersonName;
@@ -75,6 +96,22 @@ public class Employer {
                 ", contactPersonEmail='" + contactPersonEmail + '\'' +
                 ", contactPersonPhone='" + contactPersonPhone + '\'' +
                 '}';
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public int getCompanySize() {
+        return companySize;
+    }
+
+    public String getURL() {
+        return url;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
 
