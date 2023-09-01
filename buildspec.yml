@@ -2,6 +2,10 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo "Installing Java 17..."
+      - sudo apt update
+      - sudo apt install -y openjdk-17-jdk
+      - java -version
       - echo "Installing Maven..."
       - mvn --version
   build:
@@ -10,3 +14,4 @@ phases:
       - mvn clean install
 artifacts:
   files: '**/*'
+
