@@ -21,6 +21,21 @@ public class ServiceProviderController {
         this.serviceProviderService = serviceProviderService;
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ServiceProvider>> searchServiceProvider(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "perkType", required = false) String perkType) {
+
+        List<ServiceProvider> providers = serviceProviderService.searchServiceProviders(name, perkType);
+
+        if (!providers.isEmpty()) {
+            return ResponseEntity.ok(providers);
+        } else {
+            throw new NotFoundException("No Service Providers found for given criteria");
+        }
+    }
+
+
     @GetMapping(path = "{id}")
     public ResponseEntity<ServiceProvider> getServiceProvider(@PathVariable("id") long id) {
         ServiceProvider serviceProvider = serviceProviderService.getServiceProvider(id);

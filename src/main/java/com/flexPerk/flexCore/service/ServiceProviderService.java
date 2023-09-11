@@ -4,10 +4,15 @@ import com.flexPerk.flexCore.exception.EntityAlreadyExistsException;
 import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.ServiceProvider;
 import com.flexPerk.flexCore.repository.ServiceProviderRepository;
+import com.flexPerk.flexCore.searchCriteria.AndCriteria;
+import com.flexPerk.flexCore.searchCriteria.Criteria;
+import com.flexPerk.flexCore.searchCriteria.ServiceProviderNameCriteria;
+import com.flexPerk.flexCore.utils.FlexCoreConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -65,6 +70,16 @@ public class ServiceProviderService {
 
     public void approveQuotes() {
 
+    }
+
+    public List<ServiceProvider> searchServiceProviders(String name, String perkType) {
+        if (name != null) {
+            return serviceProviderRepository.findByName(name).orElse(null);
+        } else if (perkType != null) {
+            return serviceProviderRepository.findByPerkType(perkType).orElse(null);
+        } else {
+            return serviceProviderRepository.findAll();
+        }
     }
 }
 
