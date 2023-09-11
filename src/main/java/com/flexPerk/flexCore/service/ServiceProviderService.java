@@ -11,6 +11,8 @@ import com.flexPerk.flexCore.utils.FlexCoreConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -74,9 +76,11 @@ public class ServiceProviderService {
 
     public List<ServiceProvider> searchServiceProviders(String name, String perkType) {
         if (name != null) {
-            return serviceProviderRepository.findByName(name).orElse(null);
+            ServiceProvider serviceProvider = serviceProviderRepository.findByName(name).orElse(null);
+            return Arrays.asList(serviceProvider);
         } else if (perkType != null) {
-            return serviceProviderRepository.findByPerkType(perkType).orElse(null);
+            //return serviceProviderRepository.findByperktype(perkType).orElse(null);
+            return new ArrayList<>();
         } else {
             return serviceProviderRepository.findAll();
         }

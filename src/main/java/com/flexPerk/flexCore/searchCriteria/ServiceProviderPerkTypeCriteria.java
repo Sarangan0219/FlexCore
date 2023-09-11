@@ -2,6 +2,7 @@ package com.flexPerk.flexCore.searchCriteria;
 
 import com.flexPerk.flexCore.model.ServiceProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceProviderPerkTypeCriteria implements Criteria {
@@ -14,6 +15,6 @@ public class ServiceProviderPerkTypeCriteria implements Criteria {
 
     @Override
     public List<ServiceProvider> meetCriteria(List<ServiceProvider> providers) {
-        // Filter logic based on perkType
+        return new ArrayList<>();
     }
 }

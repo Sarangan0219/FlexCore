@@ -17,7 +17,8 @@ import java.util.Optional;
 
 @Repository
 public interface ServiceProviderRepository extends JpaRepository<ServiceProvider, Long> {
-    Optional<List<ServiceProvider>> findByName(String name);
-    Optional<List<ServiceProvider>> findByPerkType(String perkType);
+    Optional<ServiceProvider> findByName(String name);
+
+    //Optional<List<ServiceProvider>> findByperktype(String perkType);
 
 }
