@@ -1,14 +1,21 @@
 package com.flexPerk.flexCore.controller;
 
-import com.flexPerk.flexCore.exception.NotFoundException;
-import com.flexPerk.flexCore.model.Employee;
-import com.flexPerk.flexCore.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
+import com.flexPerk.flexCore.exception.NotFoundException;
+import com.flexPerk.flexCore.model.Employee;
+import com.flexPerk.flexCore.service.EmployeeService;
+
 
 @RestController
 @RequestMapping("/api/v1/employer/{employerId}/employee")
@@ -44,15 +51,17 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{employeeId}")
-    public Employee deleteEmployee(
+    public ResponseEntity<Employee> deleteEmployee(
             @PathVariable long employerId, @PathVariable long employeeId) {
-        return employeeService.deleteEmployee(employerId, employeeId);
+        Employee employee = employeeService.deleteEmployee(employerId, employeeId);
+        return ResponseEntity.ok(employee);
     }
 
     @PutMapping("/{employeeId}")
-    public Employee updateEmployee(@PathVariable long employerId, @PathVariable long employeeId,
-                                   @RequestBody @Valid Employee employee) {
-        return employeeService.updateEmployee(employerId, employeeId, employee);
+    public ResponseEntity<Employee> updateEmployee(@PathVariable long employerId, @PathVariable long employeeId,
+                                                   @RequestBody @Valid Employee employee) {
+        Employee updatedEmployee = employeeService.updateEmployee(employerId, employeeId, employee);
+        return ResponseEntity.ok(updatedEmployee);
     }
 
     @PostMapping

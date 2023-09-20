@@ -4,27 +4,25 @@ import com.flexPerk.flexCore.exception.EntityAlreadyExistsException;
 import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.ServiceProvider;
 import com.flexPerk.flexCore.repository.ServiceProviderRepository;
-import com.flexPerk.flexCore.searchCriteria.AndCriteria;
-import com.flexPerk.flexCore.searchCriteria.Criteria;
-import com.flexPerk.flexCore.searchCriteria.ServiceProviderNameCriteria;
-import com.flexPerk.flexCore.utils.FlexCoreConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 
 @Service
 public class ServiceProviderService {
 
     private final ServiceProviderRepository serviceProviderRepository;
+    private final FileHandlerService fileHandlerService;
 
     @Autowired
-    public ServiceProviderService(ServiceProviderRepository serviceProviderRepository) {
+    public ServiceProviderService(ServiceProviderRepository serviceProviderRepository, FileHandlerService fileHandlerService) {
         this.serviceProviderRepository = serviceProviderRepository;
+        this.fileHandlerService = fileHandlerService;
     }
 
     public ServiceProvider getServiceProvider(long id) {
@@ -64,6 +62,7 @@ public class ServiceProviderService {
                 .findByName(serviceProvider.getName()).orElse(null);
 
         if (existingServiceProvider == null) {
+            serviceProvider.setEligible(false);
             serviceProviderRepository.save(serviceProvider);
         } else {
             throw new EntityAlreadyExistsException("Service Provider: " + serviceProvider.getName() + " already exists");
@@ -83,6 +82,24 @@ public class ServiceProviderService {
             return new ArrayList<>();
         } else {
             return serviceProviderRepository.findAll();
+        }
+    }
+
+    public void uploadImage(long id, MultipartFile file) {
+        fileHandlerService.uploadImage(id, file);
+    }
+
+    public byte[] getProfileImage(long id) {
+        return fileHandlerService.getProfileImage(id);
+    }
+
+    public ServiceProvider approveServiceProvider(long id) {
+        ServiceProvider serviceProvider = getServiceProvider(id);
+        if (serviceProvider != null) {
+            serviceProvider.setEligible(true);
+            return serviceProvider;
+        } else {
+            return null;
         }
     }
 }

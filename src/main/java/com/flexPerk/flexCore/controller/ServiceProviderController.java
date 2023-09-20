@@ -5,8 +5,10 @@ import com.flexPerk.flexCore.model.ServiceProvider;
 import com.flexPerk.flexCore.service.ServiceProviderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,6 +22,7 @@ public class ServiceProviderController {
     public ServiceProviderController(ServiceProviderService serviceProviderService) {
         this.serviceProviderService = serviceProviderService;
     }
+
 
     @GetMapping("/search")
     public ResponseEntity<List<ServiceProvider>> searchServiceProvider(
@@ -69,6 +72,33 @@ public class ServiceProviderController {
     @PostMapping
     public ResponseEntity<String> registerServiceProvider(@RequestBody  @Valid ServiceProvider serviceProvider) {
         serviceProviderService.registerProvider(serviceProvider);
-        return ResponseEntity.ok("Service Provider " + serviceProvider.getName() + " registered");
+        return ResponseEntity.ok("Service Provider " + serviceProvider.getName() + " registered, " +
+                "Awaiting approval.");
     }
+
+    @PostMapping(
+            path = "{id}/profileImage",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public void uploadServiceProviderImage(
+            @PathVariable("id") long id, @RequestParam("file") MultipartFile file ) {
+            serviceProviderService.uploadImage(id, file);
+    }
+
+    @GetMapping(path = "{id}/profileImage")
+    public byte[] getServiceProviderImage(@PathVariable("id") long id) {
+        return  serviceProviderService.getProfileImage(id);
+    }
+
+    @PostMapping(path = "{id}/approve")
+    public ResponseEntity<String> approveServiceProvider(@PathVariable("id") long id) {
+        ServiceProvider serviceProvider = serviceProviderService.approveServiceProvider(id);
+        if (serviceProvider != null) {
+            return ResponseEntity.ok("Service Provider " + serviceProvider.getName() + " has been approved");
+        } else {
+            throw new NotFoundException("Service Provider with id: " + id + " not found");
+        }
+    }
+
+
 }

@@ -5,14 +5,18 @@ import com.flexPerk.flexCore.model.Employee;
 import com.flexPerk.flexCore.model.Employer;
 import com.flexPerk.flexCore.repository.EmployeeRepository;
 import com.flexPerk.flexCore.utils.EmployeeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class EmployeeService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
     private final EmployerService employerService;
 
@@ -25,7 +29,12 @@ public class EmployeeService {
     public Employee getEmployee(long employerId, long employeeId) {
         Employer employer = employerService.getEmployer(employerId);
         if (employer != null) {
-            return employeeRepository.findById(employeeId).orElse(null);
+            Employee employee = employeeRepository.findByEmployeeIdAndEmployerId(employeeId, employerId);
+            if (employee != null) {
+                return employee;
+            } else {
+                throw new NotFoundException("Employee with ID: " + employeeId + " not found for Employer with ID: " + employerId);
+            }
         } else {
             throw new NotFoundException("Employer with ID: " + employerId + " not found");
         }
@@ -34,42 +43,37 @@ public class EmployeeService {
     public List<Employee> getEmployees(long employerId) {
         Employer employer = employerService.getEmployer(employerId);
         if (employer != null) {
-            return employeeRepository.findAll();
+            return employeeRepository.findByEmployer_EmployerID(employerId);
         } else {
             throw new NotFoundException("Employer with ID: " + employerId + " not found");
         }
     }
 
+    @Transactional
     public Employee deleteEmployee(long employerId, long employeeId) {
         Employer employer = employerService.getEmployer(employerId);
         if (employer != null) {
-            Employee employeeToDelete = employeeRepository.findById(employeeId).orElse(null);
-            if (employeeToDelete != null) {
-                employeeRepository.delete(employeeToDelete);
-                return employeeToDelete;
-            } else {
-                throw new NotFoundException("Employee with ID: " + employeeId + " not found");
-            }
+            Employee employeeToDelete = employeeRepository.findById(employeeId).orElseThrow(() -> new NotFoundException("Employee with ID: " + employeeId + " not found"));
+            employeeRepository.delete(employeeToDelete);
+            return employeeToDelete;
         } else {
             throw new NotFoundException("Employer with ID: " + employerId + " not found");
         }
     }
 
+    @Transactional
     public Employee updateEmployee(long employerId, long employeeId, Employee employee) {
         if (employee != null) {
-            Employee existingEmployee = employeeRepository.findById(employeeId).orElse(null);
-            if (existingEmployee != null) {
-                existingEmployee.setFirstName(employee.getFirstName());
-                existingEmployee.setEmail(employee.getEmail());
-                return employeeRepository.save(existingEmployee);
-            } else {
-                throw new NotFoundException("Employee with ID: " + employeeId + " not found");
-            }
+            Employee existingEmployee = employeeRepository.findById(employeeId).orElseThrow(() -> new NotFoundException("Employee with ID: " + employeeId + " not found"));
+            existingEmployee.setFirstName(employee.getFirstName());
+            existingEmployee.setEmail(employee.getEmail());
+            return employeeRepository.save(existingEmployee);
         } else {
             throw new IllegalArgumentException("Employee cannot be null");
         }
     }
 
+    @Transactional
     public void registerEmployee(long employerId, Employee employee) {
         Employer employer = employerService.getEmployer(employerId);
         if (employer != null) {
@@ -78,8 +82,7 @@ public class EmployeeService {
                 EmployeeUtils.isEmployeeEmailValid(employer.getContactPersonEmail(), employee.getEmail());
                 employeeRepository.save(employee);
             } else {
-                throw new NotFoundException("Employee with ID: " + employerId + " not found in Employer with ID " +
-                        employerId);
+                throw new NotFoundException("Employee with ID: " + employerId + " not found in Employer with ID " + employerId);
             }
         } else {
             throw new NotFoundException("Employer with ID: " + employerId + " not found");

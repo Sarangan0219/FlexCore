@@ -54,12 +54,19 @@ public class EmployerController {
     @PostMapping
     public ResponseEntity<String> registerEmployer(@RequestBody  @Valid Employer employer) {
         employerService.registerEmployer(employer);
-        return ResponseEntity.ok("Employer " + employer.getName() + " registered");
+        return ResponseEntity.ok("Employer " + employer.getName() + " registered, Awaiting approval.");
     }
 
-    @GetMapping(path = "employer/{employerId}/employee/{employeeId}")
-    public void getRegistrationLink( @PathVariable("employerId") long employerId,
-                                     @PathVariable("employeeId") long employeeId) {
-        employerService.sendSelfRegistrationLink(employerId, employeeId);
+//    @GetMapping(path = "{employerId}/employee/{employeeId}")
+//    public void getRegistrationLinkForEmployees( @PathVariable("employerId") long employerId,
+//                                     @PathVariable("employeeId") long employeeId) {
+//        employerService.sendSelfRegistrationLink(employerId, employeeId);
+//    }
+
+    @GetMapping("/approve/employer/{employerId}")
+    public ResponseEntity<?> approveEmployer(@PathVariable Long employerId) {
+        employerService.performSystemSystemValidationForEmployer(employerId);
+        return ResponseEntity.ok("Employer "  + employerId + " approved");
     }
+
 }

@@ -20,7 +20,11 @@ public class Employer {
     private int companySize;
     private String url;
     private String description;
+    private String employerStatus;
 
+    public void setEmployerStatus(String employerStatus) {
+        this.employerStatus = employerStatus;
+    }
 
     public void setAddress(String address) {
         this.address = address;
@@ -49,6 +53,7 @@ public class Employer {
         this.companySize = companySize;
         this.url = url;
         this.description = description;
+        this.employerStatus = "PENDING";
     }
     public Employer() {
 
@@ -112,6 +117,10 @@ public class Employer {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getEmployerStatus() {
+        return employerStatus;
     }
 }
 
