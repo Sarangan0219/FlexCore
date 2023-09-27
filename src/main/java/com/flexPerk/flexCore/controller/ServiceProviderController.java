@@ -9,7 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -22,7 +24,6 @@ public class ServiceProviderController {
     public ServiceProviderController(ServiceProviderService serviceProviderService) {
         this.serviceProviderService = serviceProviderService;
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<List<ServiceProvider>> searchServiceProvider(
@@ -55,13 +56,19 @@ public class ServiceProviderController {
         if (serviceProviderList.size() != 0) {
             return ResponseEntity.ok(serviceProviderList);
         } else {
-            throw new NotFoundException("No Service Providers are registered with this system");
+            return ResponseEntity.ok(Arrays.asList());
+//            throw new NotFoundException("No Service Providers are registered with this system");
         }
     }
 
     @DeleteMapping(path = "{id}")
-    public ServiceProvider deleteServiceProvider(@PathVariable("id") long id) {
-        return serviceProviderService.deleteServiceProvider(id);
+    public ResponseEntity<String> deleteServiceProvider(@PathVariable("id") long id) {
+        ServiceProvider serviceProvider = serviceProviderService.deleteServiceProvider(id);
+        if (serviceProvider != null) {
+            return ResponseEntity.ok("Service Provider " + serviceProvider.getName() + " has been deleted");
+        } else {
+            throw new NotFoundException("Service Provider with id: " + id + " not found");
+        }
     }
 
     @PutMapping
@@ -70,7 +77,7 @@ public class ServiceProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<String> registerServiceProvider(@RequestBody  @Valid ServiceProvider serviceProvider) {
+    public ResponseEntity<String> registerServiceProvider(@RequestBody ServiceProvider serviceProvider) {
         serviceProviderService.registerProvider(serviceProvider);
         return ResponseEntity.ok("Service Provider " + serviceProvider.getName() + " registered, " +
                 "Awaiting approval.");
@@ -90,7 +97,7 @@ public class ServiceProviderController {
         return  serviceProviderService.getProfileImage(id);
     }
 
-    @PostMapping(path = "{id}/approve")
+    @PostMapping(path = "{id}/approve-service-provider")
     public ResponseEntity<String> approveServiceProvider(@PathVariable("id") long id) {
         ServiceProvider serviceProvider = serviceProviderService.approveServiceProvider(id);
         if (serviceProvider != null) {
@@ -99,6 +106,4 @@ public class ServiceProviderController {
             throw new NotFoundException("Service Provider with id: " + id + " not found");
         }
     }
-
-
 }

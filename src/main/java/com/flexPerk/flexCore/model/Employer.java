@@ -1,10 +1,16 @@
 package com.flexPerk.flexCore.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 
 @Entity
 @Table(name  = "Employer")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employer {
 
     @Id
@@ -40,23 +46,6 @@ public class Employer {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    // Constructors
-    public Employer(String name, String contactPersonName, String contactPersonEmail, String contactPersonPhone,
-                    String address, int companySize, String url, String description) {
-        this.name = name;
-        this.contactPersonName = contactPersonName;
-        this.contactPersonEmail = contactPersonEmail;
-        this.contactPersonPhone = contactPersonPhone;
-        this.address = address;
-        this.companySize = companySize;
-        this.url = url;
-        this.description = description;
-        this.employerStatus = "PENDING";
-    }
-    public Employer() {
-
     }
 
     public long getEmployerID() {

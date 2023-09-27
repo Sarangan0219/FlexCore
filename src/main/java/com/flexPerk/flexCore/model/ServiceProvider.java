@@ -3,13 +3,18 @@ package com.flexPerk.flexCore.model;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 
 @Entity
 @Table(name  = "ServiceProvider")
-public class ServiceProvider {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ServiceProvider  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,20 +27,17 @@ public class ServiceProvider {
     private String phoneNumber;
     private boolean isEligible;
     private String perk_type;
+    private String password;
+
+
+    public void setPerk_description(String perk_description) {
+        this.perk_description = perk_description;
+    }
+
     private String perk_description;
 
     @OneToMany(mappedBy = "serviceProvider", cascade = CascadeType.ALL)
     private List<Branch> branches;
-
-    public ServiceProvider(String name, String email, String phoneNumber, boolean isEligible, String perkType, String perkDescription) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.isEligible = isEligible;
-        perk_type = perkType;
-        perk_description = perkDescription;
-    }
-
 
     public void setName(String name) {
         this.name = name;
@@ -47,10 +49,6 @@ public class ServiceProvider {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public ServiceProvider() {
-
     }
 
     // Getters and Setters

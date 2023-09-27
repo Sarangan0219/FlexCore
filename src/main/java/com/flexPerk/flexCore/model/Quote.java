@@ -1,11 +1,17 @@
 package com.flexPerk.flexCore.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name  = "Quote")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Quote {
 
     @Id
@@ -33,28 +39,8 @@ public class Quote {
     private LocalDateTime validityStartDate;;
     private LocalDateTime validityEndDate;
 
-    private String perk_type;
-    private String perk_description;
     private int estimatedEmployeeCount;
     private double totalCost;
-
-    public Quote(ServiceProvider serviceProvider, Employer employer, LocalDateTime validityStartDate,
-                 LocalDateTime validityEndDate, String perk_type, String perk_description,
-                 int estimatedEmployeeCount, double totalCost) {
-        this.serviceProvider = serviceProvider;
-        this.employer = employer;
-        this.validityStartDate = validityStartDate;
-        this.validityEndDate = validityEndDate;
-        this.perk_type = perk_type;
-        this.perk_description = perk_description;
-        this.estimatedEmployeeCount = estimatedEmployeeCount;
-        this.totalCost = totalCost;
-        this.status = QuoteStatus.PENDING;
-    }
-
-    public Quote() {
-
-    }
 
     public ServiceProvider getServiceProvider() {
         return serviceProvider;
@@ -88,21 +74,6 @@ public class Quote {
         this.validityEndDate = validityEndDate;
     }
 
-    public String getPerk_type() {
-        return perk_type;
-    }
-
-    public void setPerk_type(String perk_type) {
-        this.perk_type = perk_type;
-    }
-
-    public String getPerk_description() {
-        return perk_description;
-    }
-
-    public void setPerk_description(String perk_description) {
-        this.perk_description = perk_description;
-    }
 
     public int getEstimatedEmployeeCount() {
         return estimatedEmployeeCount;
@@ -144,6 +115,4 @@ public class Quote {
         REJECTED,
         EXPIRED
     }
-
-
 }

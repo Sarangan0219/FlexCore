@@ -1,6 +1,5 @@
 package com.flexPerk.flexCore.model;
 
-
 import jakarta.persistence.*;
 
 @Entity

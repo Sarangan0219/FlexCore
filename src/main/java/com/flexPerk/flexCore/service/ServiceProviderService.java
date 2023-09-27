@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -45,7 +46,7 @@ public class ServiceProviderService {
             existingServiceProvider.setName(updatedServiceProvider.getName());
             existingServiceProvider.setEmail(updatedServiceProvider.getEmail());
             existingServiceProvider.setPhoneNumber(updatedServiceProvider.getPhoneNumber());
-            existingServiceProvider.setEligible(updatedServiceProvider.isEligible());
+            existingServiceProvider.setPerk_description(updatedServiceProvider.getPerk_description());
 
             return serviceProviderRepository.save(existingServiceProvider);
         } else {
@@ -54,7 +55,12 @@ public class ServiceProviderService {
     }
 
     public List<ServiceProvider> getServiceProviders() {
-        return serviceProviderRepository.findAll();
+
+        List<ServiceProvider> serviceProviderList = serviceProviderRepository.findAll();
+        List<ServiceProvider> filteredServiceProviderList  = serviceProviderList.stream()
+                .filter(ServiceProvider::isEligible)
+                .toList();
+        return filteredServiceProviderList;
     }
 
     public void registerProvider(ServiceProvider serviceProvider) {
@@ -97,6 +103,7 @@ public class ServiceProviderService {
         ServiceProvider serviceProvider = getServiceProvider(id);
         if (serviceProvider != null) {
             serviceProvider.setEligible(true);
+            serviceProviderRepository.save(serviceProvider);
             return serviceProvider;
         } else {
             return null;

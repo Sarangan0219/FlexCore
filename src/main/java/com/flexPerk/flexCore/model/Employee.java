@@ -1,9 +1,17 @@
 package com.flexPerk.flexCore.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Entity
 @Table(name  = "Employee")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Employee {
     @Id
     @Column(name = "employeeId", updatable = false)
@@ -12,7 +20,7 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String email;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private String gender;
     private String phoneNumber;
     private String address;
@@ -42,11 +50,11 @@ public class Employee {
     }
 
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -141,35 +149,6 @@ public class Employee {
 
     )
     private Employer employer;
-
-    // Constructors
-    public Employee() {
-        // Default constructor
-    }
-
-    public Employee(long employeeID, String firstName, String lastName, String email,
-                    String dateOfBirth, String gender, String phoneNumber, String address, String position,
-                    String department, String employmentStartDate, String employmentStatus, String emergencyContact,
-                    String emergencyContactPhone, String emergencyContactRelationship, String otherInformation,
-                    Employer employer) {
-        this.employeeID = employeeID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-        this.position = position;
-        this.department = department;
-        this.employmentStartDate = employmentStartDate;
-        this.employmentStatus = employmentStatus;
-        this.emergencyContact = emergencyContact;
-        this.emergencyContactPhone = emergencyContactPhone;
-        this.emergencyContactRelationship = emergencyContactRelationship;
-        this.otherInformation = otherInformation;
-        this.employer = employer;
-    }
 
     public String getPosition() {
         return position;

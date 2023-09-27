@@ -13,17 +13,4 @@ public class FlexCoreApplication {
 		SpringApplication.run(FlexCoreApplication.class, args);
 	}
 
-//	@Bean
-//	CommandLineRunner commandLineRunner(S3Service s3Service) {
-//		return args -> {
-//			s3Service.putObject("flexcoreobjectstore",
-//					"foo",
-//					"hello world".getBytes());
-//
-//			byte[] foos = s3Service.getObject("flexcoreobjectstore", "foo");
-//
-//			System.out.println(new String(foos));
-//		};
-//	}
-
 }
