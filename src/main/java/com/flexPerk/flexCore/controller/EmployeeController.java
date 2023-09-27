@@ -3,20 +3,15 @@ package com.flexPerk.flexCore.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.Employee;
 import com.flexPerk.flexCore.service.EmployeeService;
 
-
+/**
+ * Handles employee management requests, including retrieval, deletion, updating, and registration.
+ */
 @RestController
 @RequestMapping("/api/v1/employer/{employerId}/employee")
 public class EmployeeController {
@@ -28,6 +23,14 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    /**
+     * Retrieves a specific employee by their ID.
+     *
+     * @param employerId the employer's ID.
+     * @param employeeId the employee's ID.
+     * @return a response containing the employee's details.
+     * @throws NotFoundException if the employee is not found.
+     */
     @GetMapping("/{employeeId}")
     public ResponseEntity<Employee> getEmployee(
             @PathVariable long employerId, @PathVariable long employeeId) {
@@ -40,6 +43,13 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Retrieves all employees of a specific employer.
+     *
+     * @param employerId the employer's ID.
+     * @return a response containing a list of employees.
+     * @throws NotFoundException if no employees are found.
+     */
     @GetMapping
     public ResponseEntity<List<Employee>> getEmployees(@PathVariable long employerId) {
         List<Employee> employeeList = employeeService.getEmployees(employerId);
@@ -50,6 +60,13 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Deletes a specific employee by their ID.
+     *
+     * @param employerId the employer's ID.
+     * @param employeeId the employee's ID.
+     * @return a response containing the details of the deleted employee.
+     */
     @DeleteMapping("/{employeeId}")
     public ResponseEntity<Employee> deleteEmployee(
             @PathVariable long employerId, @PathVariable long employeeId) {
@@ -57,6 +74,14 @@ public class EmployeeController {
         return ResponseEntity.ok(employee);
     }
 
+    /**
+     * Updates the details of a specific employee.
+     *
+     * @param employerId the employer's ID.
+     * @param employeeId the employee's ID.
+     * @param employee the updated employee details.
+     * @return a response containing the updated employee details.
+     */
     @PutMapping("/{employeeId}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable long employerId, @PathVariable long employeeId,
                                                    @RequestBody @Valid Employee employee) {
@@ -64,6 +89,13 @@ public class EmployeeController {
         return ResponseEntity.ok(updatedEmployee);
     }
 
+    /**
+     * Registers a new employee for a specific employer.
+     *
+     * @param employerId the employer's ID.
+     * @param employee the new employee details.
+     * @return a response confirming the registration.
+     */
     @PostMapping
     public ResponseEntity<String> registerEmployee(
             @PathVariable long employerId, @RequestBody @Valid Employee employee) {

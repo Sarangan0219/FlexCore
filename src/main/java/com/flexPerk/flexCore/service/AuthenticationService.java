@@ -3,6 +3,7 @@ package com.flexPerk.flexCore.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flexPerk.flexCore.auth.AuthenticationRequest;
 import com.flexPerk.flexCore.auth.AuthenticationResponse;
+import com.flexPerk.flexCore.exception.EntityAlreadyExistsException;
 import com.flexPerk.flexCore.model.RegisterRequest;
 import com.flexPerk.flexCore.model.Token;
 import com.flexPerk.flexCore.model.TokenType;
@@ -32,12 +33,22 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Registers a new user with the given request details, generates JWT and refresh tokens for the user.
+     *
+     * @param request the user registration details.
+     * @return an authentication response containing JWT and refresh tokens.
+     */
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
+        var existingUser = repository.findByUsername(request.getUsername()).orElse(null);
+        if(existingUser != null) {
+            return null;
+        }
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -48,6 +59,12 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Authenticates a user with the given credentials, generates new JWT and refresh tokens upon successful authentication.
+     *
+     * @param request the user authentication request containing username and password.
+     * @return an authentication response containing JWT and refresh tokens.
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -67,6 +84,12 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Saves the user's JWT token.
+     *
+     * @param user the user entity.
+     * @param jwtToken the JWT token string.
+     */
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
@@ -78,6 +101,11 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
+    /**
+     * Revokes all valid tokens associated with the given user.
+     *
+     * @param user the user entity.
+     */
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getUserId());
         if (validUserTokens.isEmpty())
@@ -89,6 +117,13 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
+    /**
+     * Refreshes the JWT token for a user upon a valid refresh token request.
+     *
+     * @param request the HTTP request containing the refresh token.
+     * @param response the HTTP response to which the new JWT token is written.
+     * @throws IOException if an I/O error occurs.
+     */
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
