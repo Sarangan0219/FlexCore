@@ -1,11 +1,8 @@
 package com.flexPerk.flexCore.service;
 
-import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.Employee;
 import com.flexPerk.flexCore.model.Employer;
 import com.flexPerk.flexCore.repository.EmployeeRepository;
-import com.flexPerk.flexCore.service.EmployerService;
-import com.flexPerk.flexCore.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
