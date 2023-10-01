@@ -36,11 +36,55 @@ public class Quote {
     )
     private Employer employer;
     private QuoteStatus status;
-    private LocalDateTime validityStartDate;;
-    private LocalDateTime validityEndDate;
 
+
+    private long contractDuration;
     private int estimatedEmployeeCount;
-    private double totalCost;
+    private int paymentFrequency;
+    private double estimatedTotalCost;
+    private String negotiableAttributes;
+
+    public long getContractDuration() {
+        return contractDuration;
+    }
+
+    public void setContractDuration(long contractDuration) {
+        this.contractDuration = contractDuration;
+    }
+
+    public int getPaymentFrequency() {
+        return paymentFrequency;
+    }
+
+    public void setPaymentFrequency(int paymentFrequency) {
+        this.paymentFrequency = paymentFrequency;
+    }
+
+    public double getEstimatedTotalCost() {
+        return estimatedTotalCost;
+    }
+
+    public void setEstimatedTotalCost(double estimatedTotalCost) {
+        this.estimatedTotalCost = estimatedTotalCost;
+    }
+
+    public String getNegotiableAttributes() {
+        return negotiableAttributes;
+    }
+
+    public void setNegotiableAttributes(String negotiableAttributes) {
+        this.negotiableAttributes = negotiableAttributes;
+    }
+
+    public String getAdditionalInformation() {
+        return additionalInformation;
+    }
+
+    public void setAdditionalInformation(String additionalInformation) {
+        this.additionalInformation = additionalInformation;
+    }
+
+    private String additionalInformation;
 
     public ServiceProvider getServiceProvider() {
         return serviceProvider;
@@ -58,37 +102,12 @@ public class Quote {
         this.employer = employer;
     }
 
-    public LocalDateTime getValidityStartDate() {
-        return validityStartDate;
-    }
-
-    public void setValidityStartDate(LocalDateTime validityStartDate) {
-        this.validityStartDate = validityStartDate;
-    }
-
-    public LocalDateTime getValidityEndDate() {
-        return validityEndDate;
-    }
-
-    public void setValidityEndDate(LocalDateTime validityEndDate) {
-        this.validityEndDate = validityEndDate;
-    }
-
-
     public int getEstimatedEmployeeCount() {
         return estimatedEmployeeCount;
     }
 
     public void setEstimatedEmployeeCount(int estimatedEmployeeCount) {
         this.estimatedEmployeeCount = estimatedEmployeeCount;
-    }
-
-    public double getTotalCost() {
-        return totalCost;
-    }
-
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
     }
 
     public void setQuoteID(long quoteID) {

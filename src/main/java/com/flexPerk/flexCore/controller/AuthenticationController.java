@@ -40,9 +40,8 @@ public class AuthenticationController {
         if (authenticationResponse != null) {
             return ResponseEntity.ok(authenticationResponse);
         } else {
-//            throw new EntityAlreadyExistsException(request.getUsername() + " already exists.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Registration failed");
+                    .body("Registration failed as " + request.getUsername() + " already exists");
         }
 
     }

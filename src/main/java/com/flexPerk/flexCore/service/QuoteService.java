@@ -3,7 +3,9 @@ package com.flexPerk.flexCore.service;
 
 import com.flexPerk.flexCore.exception.EntityAlreadyExistsException;
 import com.flexPerk.flexCore.exception.NotFoundException;
+import com.flexPerk.flexCore.model.Employer;
 import com.flexPerk.flexCore.model.Quote;
+import com.flexPerk.flexCore.model.ServiceProvider;
 import com.flexPerk.flexCore.repository.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,14 @@ import java.util.List;
 public class QuoteService {
 
     private final QuoteRepository quoteRepository;
+    private final EmployerService employerService;
+    private  final ServiceProviderService serviceProviderService;
 
     @Autowired
-    public QuoteService(QuoteRepository quoteRepository) {
+    public QuoteService(QuoteRepository quoteRepository, EmployerService employerService, ServiceProviderService serviceProviderService) {
         this.quoteRepository = quoteRepository;
+        this.employerService = employerService;
+        this.serviceProviderService = serviceProviderService;
     }
 
     public Quote getQuote(long id) {
@@ -52,11 +58,25 @@ public class QuoteService {
 
     public void createQuote(Quote quote) {
         Quote existingQuote = quoteRepository.findById(quote.getQuoteID()).orElse(null);
-
         if (existingQuote == null) {
+            ServiceProvider serviceProvider =
+                    serviceProviderService.getServiceProvider(quote.getServiceProvider().getServiceProviderID());
+            quote.setServiceProvider(serviceProvider);
+
+            Employer employer = employerService.getEmployer(quote.getEmployer().getEmployerID());
+            quote.setEmployer(employer);
+
+            quote.setStatus(Quote.QuoteStatus.PENDING);
             quoteRepository.save(quote);
         } else {
             throw new EntityAlreadyExistsException("Quote with ID " + quote.getQuoteID() + " already exists");
         }
+    }
+
+    public Quote approveQuote(long id) {
+        Quote quote = getQuote(id);
+        quote.setStatus(Quote.QuoteStatus.ACCEPTED);
+        quoteRepository.save(quote);
+        return quote;
     }
 }

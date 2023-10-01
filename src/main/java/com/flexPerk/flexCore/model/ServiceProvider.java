@@ -29,6 +29,9 @@ public class ServiceProvider  {
     private String perk_type;
     private String password;
 
+    public void setServiceProviderID(long serviceProviderID) {
+        this.serviceProviderID = serviceProviderID;
+    }
 
     public void setPerk_description(String perk_description) {
         this.perk_description = perk_description;

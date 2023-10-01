@@ -26,10 +26,26 @@ public class Employer {
     private int companySize;
     private String url;
     private String description;
-    private String employerStatus;
+    private boolean isApproved;
 
-    public void setEmployerStatus(String employerStatus) {
-        this.employerStatus = employerStatus;
+    public void setEmployerID(long employerID) {
+        this.employerID = employerID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public boolean isApproved() {
+        return isApproved;
+    }
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
     }
 
     public void setAddress(String address) {
@@ -100,16 +116,10 @@ public class Employer {
         return companySize;
     }
 
-    public String getURL() {
-        return url;
-    }
 
     public String getDescription() {
         return description;
     }
 
-    public String getEmployerStatus() {
-        return employerStatus;
-    }
 }
 

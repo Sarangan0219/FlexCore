@@ -2,10 +2,12 @@ package com.flexPerk.flexCore.controller;
 
 import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.Employer;
+import com.flexPerk.flexCore.model.ServiceProvider;
 import com.flexPerk.flexCore.service.EmployerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,10 +65,11 @@ public class EmployerController {
 //        employerService.sendSelfRegistrationLink(employerId, employeeId);
 //    }
 
-    @GetMapping("/approve/employer/{employerId}")
-    public ResponseEntity<?> approveEmployer(@PathVariable Long employerId) {
-        employerService.performSystemSystemValidationForEmployer(employerId);
-        return ResponseEntity.ok("Employer "  + employerId + " approved");
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping(path = "{id}/approve-service-provider")
+    public ResponseEntity<?> approveEmployer(@PathVariable("id") long id) {
+        employerService.performSystemSystemValidationForEmployer(id);
+        return ResponseEntity.ok("Employer "  + id+ " approved");
     }
 
 }

@@ -1,6 +1,6 @@
 package com.flexPerk.flexCore.config;
 
-import com.flexPerk.flexCore.repository.CustomerRepository;
+import com.flexPerk.flexCore.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final CustomerRepository repository;
+    private final UserRepository repository;
 
     /**
      * Provides an instance of {@link UserDetailsService} to retrieve user-related data.

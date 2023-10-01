@@ -63,6 +63,7 @@ public class EmployerService {
         Employer existingEmployer = employerRepository.findByName(employer.getName()).orElse(null);
 
         if (existingEmployer == null) {
+            employer.setApproved(false);
             employerRepository.save(employer);
         } else {
             throw new EntityAlreadyExistsException("Employer: " + employer.getName() + " already exists");

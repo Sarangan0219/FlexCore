@@ -3,15 +3,15 @@ package com.flexPerk.flexCore.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.stream.Collectors;
 import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.Employee;
+import com.flexPerk.flexCore.DTO.EmployeeDTO;
 import com.flexPerk.flexCore.service.EmployeeService;
 
-/**
- * Handles employee management requests, including retrieval, deletion, updating, and registration.
- */
 @RestController
 @RequestMapping("/api/v1/employer/{employerId}/employee")
 public class EmployeeController {
@@ -31,15 +31,16 @@ public class EmployeeController {
      * @return a response containing the employee's details.
      * @throws NotFoundException if the employee is not found.
      */
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @GetMapping("/{employeeId}")
-    public ResponseEntity<Employee> getEmployee(
+    public ResponseEntity<EmployeeDTO> getEmployee(
             @PathVariable long employerId, @PathVariable long employeeId) {
         Employee employee = employeeService.getEmployee(employerId, employeeId);
         if (employee != null) {
-            return ResponseEntity.ok(employee);
+            EmployeeDTO employeeDTO = new EmployeeDTO("Employee retrieved successfully", employee);
+            return ResponseEntity.ok(employeeDTO);
         } else {
-            throw new NotFoundException("Employee with id: " + employeeId + " under Employer with id: " + employerId +
-                    " not found");
+            throw new NotFoundException("Employee with id: " + employeeId + " not found");
         }
     }
 
@@ -50,13 +51,17 @@ public class EmployeeController {
      * @return a response containing a list of employees.
      * @throws NotFoundException if no employees are found.
      */
+    @PreAuthorize("hasAuthority('EMPLOYER')")
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees(@PathVariable long employerId) {
+    public ResponseEntity<List<EmployeeDTO>> getEmployees(@PathVariable long employerId) {
         List<Employee> employeeList = employeeService.getEmployees(employerId);
         if (!employeeList.isEmpty()) {
-            return ResponseEntity.ok(employeeList);
+            List<EmployeeDTO> employeeDTOList = employeeList.stream()
+                    .map(employee -> new EmployeeDTO("Employee retrieved successfully", employee))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(employeeDTOList);
         } else {
-            throw new NotFoundException("No Employees are registered for the Employer with ID " + employerId);
+            throw new NotFoundException("No Employees found");
         }
     }
 
@@ -67,11 +72,13 @@ public class EmployeeController {
      * @param employeeId the employee's ID.
      * @return a response containing the details of the deleted employee.
      */
+    @PreAuthorize("hasAuthority('EMPLOYER')")
     @DeleteMapping("/{employeeId}")
-    public ResponseEntity<Employee> deleteEmployee(
+    public ResponseEntity<EmployeeDTO> deleteEmployee(
             @PathVariable long employerId, @PathVariable long employeeId) {
         Employee employee = employeeService.deleteEmployee(employerId, employeeId);
-        return ResponseEntity.ok(employee);
+        EmployeeDTO employeeDTO = new EmployeeDTO("Employee deleted successfully", employee);
+        return ResponseEntity.ok(employeeDTO);
     }
 
     /**
@@ -82,11 +89,13 @@ public class EmployeeController {
      * @param employee the updated employee details.
      * @return a response containing the updated employee details.
      */
+    @PreAuthorize("hasAuthority('EMPLOYEE')")
     @PutMapping("/{employeeId}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable long employerId, @PathVariable long employeeId,
-                                                   @RequestBody @Valid Employee employee) {
+    public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable long employerId, @PathVariable long employeeId,
+                                                      @RequestBody @Valid Employee employee) {
         Employee updatedEmployee = employeeService.updateEmployee(employerId, employeeId, employee);
-        return ResponseEntity.ok(updatedEmployee);
+        EmployeeDTO employeeDTO = new EmployeeDTO("Employee updated successfully", updatedEmployee);
+        return ResponseEntity.ok(employeeDTO);
     }
 
     /**
@@ -96,10 +105,12 @@ public class EmployeeController {
      * @param employee the new employee details.
      * @return a response confirming the registration.
      */
+    @PreAuthorize("hasAuthority('EMPLOYER')")
     @PostMapping
-    public ResponseEntity<String> registerEmployee(
+    public ResponseEntity<EmployeeDTO> registerEmployee(
             @PathVariable long employerId, @RequestBody @Valid Employee employee) {
         employeeService.registerEmployee(employerId, employee);
-        return ResponseEntity.ok("Employee " + employee.getFirstName() + " registered");
+        EmployeeDTO employeeDTO = new EmployeeDTO("Employee registered successfully", employee);
+        return ResponseEntity.ok(employeeDTO);
     }
 }

@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import java.io.IOException;
 
 @Service
-public class S3Service  {
+public class S3Service  implements StorageService {
 
     private final S3Client s3Client;
 
@@ -32,7 +32,7 @@ public class S3Service  {
         putObjectResponse.toString();
     }
 
-    public byte[] getObject(String bucketName, String key) {
+    public byte[] getObject(long id, String bucketName, String key) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -45,5 +45,10 @@ public class S3Service  {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public byte[] getProfileImage(long id) {
+        return getObject(id, "bucket", "key");
     }
 }

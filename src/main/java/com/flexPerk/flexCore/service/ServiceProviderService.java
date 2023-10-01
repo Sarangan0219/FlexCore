@@ -27,7 +27,13 @@ public class ServiceProviderService {
     }
 
     public ServiceProvider getServiceProvider(long id) {
-        return serviceProviderRepository.findById(id).orElse(null);
+
+        ServiceProvider serviceProvider = serviceProviderRepository.findById(id).orElse(null);
+        if (serviceProvider != null && serviceProvider.isEligible()) {
+            return serviceProvider;
+        } else {
+            throw new RuntimeException("Service provider " + serviceProvider.getName() + " is not yet approved");
+        }
     }
 
     public ServiceProvider deleteServiceProvider(long id) {
@@ -57,19 +63,27 @@ public class ServiceProviderService {
     public List<ServiceProvider> getServiceProviders() {
 
         List<ServiceProvider> serviceProviderList = serviceProviderRepository.findAll();
-        List<ServiceProvider> filteredServiceProviderList  = serviceProviderList.stream()
+        return serviceProviderList.stream()
                 .filter(ServiceProvider::isEligible)
                 .toList();
-        return filteredServiceProviderList;
     }
 
-    public void registerProvider(ServiceProvider serviceProvider) {
+    public List<ServiceProvider> getPendingServiceProviders() {
+
+        List<ServiceProvider> serviceProviderList = serviceProviderRepository.findAll();
+        return serviceProviderList.stream()
+                .filter(serviceProvider -> !serviceProvider.isEligible())
+                .toList();
+    }
+
+    public ServiceProvider registerProvider(ServiceProvider serviceProvider) {
         ServiceProvider existingServiceProvider = serviceProviderRepository
                 .findByName(serviceProvider.getName()).orElse(null);
 
         if (existingServiceProvider == null) {
             serviceProvider.setEligible(false);
             serviceProviderRepository.save(serviceProvider);
+            return serviceProvider;
         } else {
             throw new EntityAlreadyExistsException("Service Provider: " + serviceProvider.getName() + " already exists");
         }
@@ -100,7 +114,7 @@ public class ServiceProviderService {
     }
 
     public ServiceProvider approveServiceProvider(long id) {
-        ServiceProvider serviceProvider = getServiceProvider(id);
+        ServiceProvider serviceProvider = serviceProviderRepository.findById(id).orElse(null);
         if (serviceProvider != null) {
             serviceProvider.setEligible(true);
             serviceProviderRepository.save(serviceProvider);

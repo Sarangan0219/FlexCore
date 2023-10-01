@@ -3,23 +3,19 @@ package com.flexPerk.flexCore.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flexPerk.flexCore.auth.AuthenticationRequest;
 import com.flexPerk.flexCore.auth.AuthenticationResponse;
-import com.flexPerk.flexCore.exception.EntityAlreadyExistsException;
 import com.flexPerk.flexCore.model.RegisterRequest;
 import com.flexPerk.flexCore.model.Token;
 import com.flexPerk.flexCore.model.TokenType;
 import com.flexPerk.flexCore.model.User;
-import com.flexPerk.flexCore.repository.CustomerRepository;
 import com.flexPerk.flexCore.repository.TokenRepository;
+import com.flexPerk.flexCore.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,7 +23,7 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final CustomerRepository repository;
+    private final UserRepository repository;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -45,7 +41,8 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
-        var existingUser = repository.findByUsername(request.getUsername()).orElse(null);
+        var existingUser = repository.findByUsernameAndRole(request.getUsername(),
+                request.getRole()).orElse(null);
         if(existingUser != null) {
             return null;
         }

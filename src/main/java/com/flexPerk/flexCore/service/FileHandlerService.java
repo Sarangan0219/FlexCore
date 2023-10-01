@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class FileHandlerService {
+public class FileHandlerService implements StorageService {
 
     private final Path rootLocation = Paths.get("/Users/saranganjanakan/IdeaProjects/FlexCore/src/main/resources/assets");
     public void uploadImage(long id, MultipartFile file) {
@@ -24,6 +24,7 @@ public class FileHandlerService {
         }
     }
 
+    @Override
     public byte[] getProfileImage(long id) {
         try {
             Path filePath = findProfileImage(id);
@@ -37,7 +38,7 @@ public class FileHandlerService {
         }
     }
 
-    private Path findProfileImage(long id) throws IOException {
+    public Path findProfileImage(long id) throws IOException {
         try (var paths = Files.list(rootLocation)) {
             return paths
                     .filter(path -> path.getFileName().toString().startsWith(id + "_"))
