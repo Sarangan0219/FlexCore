@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 public class FileHandlerService implements StorageService {
 
     private final Path rootLocation = Paths.get("/Users/saranganjanakan/IdeaProjects/FlexCore/src/main/resources/assets");
+
     public void uploadImage(long id, MultipartFile file) {
         try {
             if (file.isEmpty()) {

@@ -3,7 +3,9 @@ package com.flexPerk.flexCore.service;
 import com.flexPerk.flexCore.exception.NotFoundException;
 import com.flexPerk.flexCore.model.Employee;
 import com.flexPerk.flexCore.model.Employer;
+import com.flexPerk.flexCore.model.SubscriptionRequest;
 import com.flexPerk.flexCore.repository.EmployeeRepository;
+import com.flexPerk.flexCore.repository.SubscriptionRequestRepository;
 import com.flexPerk.flexCore.utils.EmployeeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +21,15 @@ public class EmployeeService {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
     private final EmployeeRepository employeeRepository;
     private final EmployerService employerService;
+    private final SubscriptionRequestRepository subscriptionRequestRepository;
+    private final NotificationService notificationService;
 
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository, EmployerService employerService) {
+    public EmployeeService(EmployeeRepository employeeRepository, EmployerService employerService, SubscriptionRequestRepository subscriptionRequestRepository, NotificationService notificationService) {
         this.employeeRepository = employeeRepository;
         this.employerService = employerService;
+        this.subscriptionRequestRepository = subscriptionRequestRepository;
+        this.notificationService = notificationService;
     }
 
     public Employee getEmployee(long employerId, long employeeId) {
@@ -60,6 +66,29 @@ public class EmployeeService {
             throw new NotFoundException("Employer with ID: " + employerId + " not found");
         }
     }
+
+    public void subscribeServiceProvider(long employerId, long employeeId, long serviceProviderId) {
+        Employer employer = employerService.getEmployer(employerId);
+        if (employer == null) {
+            throw new NotFoundException("Employer with ID: " + employerId + " not found");
+        }
+
+        Employee employee = getEmployee(employerId, employeeId);
+        if (employee == null) {
+            throw new NotFoundException("Employee with ID: " + employeeId + " not found for Employer with ID: " + employerId);
+        }
+
+        SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+        subscriptionRequest.setEmployee(employee);
+        subscriptionRequest.setServiceProviderId(serviceProviderId);
+        subscriptionRequest.setApproved(false);
+        subscriptionRequestRepository.save(subscriptionRequest);
+
+        notificationService.sendNotification(employerId, subscriptionRequest);
+
+        logger.info("Subscription request from Employee ID: {} for Service Provider ID: {} sent to Employer ID: {} for approval.", employeeId, serviceProviderId, employerId);
+    }
+
 
     @Transactional
     public Employee updateEmployee(long employerId, long employeeId, Employee employee) {

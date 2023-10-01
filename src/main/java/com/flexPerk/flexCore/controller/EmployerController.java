@@ -72,4 +72,18 @@ public class EmployerController {
         return ResponseEntity.ok("Employer "  + id+ " approved");
     }
 
+    @PreAuthorize("hasAuthority('EMPLOYER')")
+    @PostMapping(path = "{employerId}/approve-request/{requestId}")
+    public ResponseEntity<String> approveOptInRequest(@PathVariable("employerId") long employerId, @PathVariable("requestId") long requestId) {
+        employerService.approveOptInRequest(requestId);
+        return ResponseEntity.ok("Subscription request approved.");
+    }
+
+    @PreAuthorize("hasAuthority('EMPLOYER')")
+    @PostMapping(path = "{employerId}/reject-request/{requestId}")
+    public ResponseEntity<String> rejectOptInRequest(@PathVariable("employerId") long employerId, @PathVariable("requestId") long requestId) {
+        employerService.rejectOptInRequest(requestId);
+        return ResponseEntity.ok("Subscription request rejected.");
+    }
+
 }

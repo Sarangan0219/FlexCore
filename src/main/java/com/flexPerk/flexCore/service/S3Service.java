@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import java.io.IOException;
 
 @Service
-public class S3Service  implements StorageService {
+public class S3Service implements StorageService {
 
     private final S3Client s3Client;
 

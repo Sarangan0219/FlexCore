@@ -43,7 +43,7 @@ public class AuthenticationService {
                 .build();
         var existingUser = repository.findByUsernameAndRole(request.getUsername(),
                 request.getRole()).orElse(null);
-        if(existingUser != null) {
+        if (existingUser != null) {
             return null;
         }
         var savedUser = repository.save(user);
@@ -84,7 +84,7 @@ public class AuthenticationService {
     /**
      * Saves the user's JWT token.
      *
-     * @param user the user entity.
+     * @param user     the user entity.
      * @param jwtToken the JWT token string.
      */
     private void saveUserToken(User user, String jwtToken) {
@@ -117,7 +117,7 @@ public class AuthenticationService {
     /**
      * Refreshes the JWT token for a user upon a valid refresh token request.
      *
-     * @param request the HTTP request containing the refresh token.
+     * @param request  the HTTP request containing the refresh token.
      * @param response the HTTP response to which the new JWT token is written.
      * @throws IOException if an I/O error occurs.
      */
@@ -128,7 +128,7 @@ public class AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return;
         }
         refreshToken = authHeader.substring(7);

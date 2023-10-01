@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,9 +39,9 @@ public class JwtService {
     /**
      * Extracts a claim from the given JWT token using the provided claims resolver function.
      *
-     * @param token the JWT token.
+     * @param token          the JWT token.
      * @param claimsResolver a function to extract a specific claim from the token's claims.
-     * @param <T> the type of the claim to be extracted.
+     * @param <T>            the type of the claim to be extracted.
      * @return the extracted claim.
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -84,7 +85,7 @@ public class JwtService {
      *
      * @param extraClaims additional claims to be included in the token.
      * @param userDetails the user details.
-     * @param expiration the expiration time of the token in milliseconds.
+     * @param expiration  the expiration time of the token in milliseconds.
      * @return the built JWT token.
      */
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
@@ -101,7 +102,7 @@ public class JwtService {
     /**
      * Checks if the given JWT token is valid for the specified user details.
      *
-     * @param token the JWT token.
+     * @param token       the JWT token.
      * @param userDetails the user details.
      * @return true if the token is valid, false otherwise.
      */
@@ -136,7 +137,7 @@ public class JwtService {
      * @param token the JWT token.
      * @return the claims extracted from the token.
      */
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -151,6 +152,7 @@ public class JwtService {
      * @return the signing key.
      */
     private Key getSignInKey() {
+        String secretKey = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }

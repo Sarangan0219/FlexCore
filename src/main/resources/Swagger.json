@@ -1,0 +1,1248 @@
+{
+  "x-info": {
+    "_postman_id": "496aec09-c171-4f69-9055-e78e1fa5bed5",
+    "name": "FlexCore",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25118607"
+  },
+  "x-item": [
+    {
+      "name": "Service Providers",
+      "item": [
+        {
+          "name": "Register Service Provider",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcEBnbWFpbC5jb20iLCJpYXQiOjE2OTYwNzE0NDMsImV4cCI6MTY5NjE1Nzg0M30.K1nWLF85F2oRXTgxMlbj0Hbe1H6YQ9KOLY3CPlzzB5U",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Farringdon GYM\",\n    \"email\": \"may@gmail.com\",\n    \"phoneNumber\": \"77347823584\",\n    \"perk_type\" : \"GYM\",\n    \"perkDescription\" : \"GYM Provider from may\",\n    \"password\" : \"watford@2023\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Service Provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 500\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(500);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate timestamp field exists\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData.timestamp).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the status field\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.status).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the error field\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.error).to.exist;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate the message field\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.message).to.exist.and.to.be.a('string');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2OTYwNzEzMTQsImV4cCI6MTY5NjE1NzcxNH0.2ePVqHCWH2ypEpqCHUUR86oPFhgLQUwBrWPnaMznPeA",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Farringdon GYM\",\n    \"email\": \"may@gmail.com\",\n    \"phoneNumber\": \"77347823584\",\n    \"perk_type\" : \"GYM\",\n    \"perkDescription\" : \"GYM Provider from may\",\n    \"password\" : \"watford@2023\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider/1/approve-service-provider",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider",
+                "1",
+                "approve-service-provider"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Service providers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.expect(pm.response.code).to.equal(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    responseData.forEach(function (item) {",
+                  "        pm.expect(item.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"phoneNumber is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    responseData.forEach(function(provider) {",
+                  "        pm.expect(provider.phoneNumber).to.be.a('string').and.to.have.lengthOf.at.least(1, \"phoneNumber should not be empty\");",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Eligible must be a boolean value\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  responseData.forEach(function (item) {",
+                  "    pm.expect(item.eligible).to.be.a('boolean');",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjRAZ21haWwuY29tIiwiaWF0IjoxNjk2MDcxNjM1LCJleHAiOjE2OTYxNTgwMzV9.WYzE9W0eAuBAY56ZaitNssVV4V-OyFnxn45XL7eGYIs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Service Provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"serviceProviderID is a non-zero integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.serviceProviderID).to.be.a('number');",
+                  "    pm.expect(responseData.serviceProviderID).to.not.equal(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});",
+                  "",
+                  "",
+                  "  pm.test(\"phoneNumber is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.phoneNumber).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "  });"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Service providers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcEBnbWFpbC5jb20iLCJpYXQiOjE2OTYwNzE0NDMsImV4cCI6MTY5NjE1Nzg0M30.K1nWLF85F2oRXTgxMlbj0Hbe1H6YQ9KOLY3CPlzzB5U",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"serviceProviderID\": 1,\n    \"name\": \"Farringdon GYM\",\n    \"email\": \"may@gmail.com\",\n    \"phoneNumber\": \"77347823584\",\n    \"perk_type\": \"GYM\",\n    \"perk_description\": \"updated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Service providers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Validate serviceProviderID field\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData.serviceProviderID).to.exist.and.to.be.a('number');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"phoneNumber is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.phoneNumber).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The eligible field must be a boolean value\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.eligible).to.be.a('boolean');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzcDRAZ21haWwuY29tIiwiaWF0IjoxNjk1OTAxNjEwLCJleHAiOjE2OTU5ODgwMTB9.leLZmZL6wT-t-8ipJX69-dVCYWaaXlKDJroOMmzcz_0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Service providers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjRAZ21haWwuY29tIiwiaWF0IjoxNjk2MDcxNjM1LCJleHAiOjE2OTYxNTgwMzV9.WYzE9W0eAuBAY56ZaitNssVV4V-OyFnxn45XL7eGYIs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/serviceProvider/search?name=tr",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "serviceProvider",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "tr"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employers",
+      "item": [
+        {
+          "name": "Employer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llckBnbWFpbC5jb20iLCJpYXQiOjE2OTU5MDM3NzYsImV4cCI6MTY5NTk5MDE3Nn0.Y_nLt-Cro1ARr4Q2ZCVjEvmwRMuq0MArSc8v1S82vDI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"XYZ Corporation\",\n    \"contactPersonName\": \"Jane Smith\",\n    \"contactPersonEmail\": \"jane@example.com\",\n    \"contactPersonPhone\": \"987-654-3210\",\n    \"address\": \"456 Elm Avenue, Townsville\",\n    \"companySize\": 200,\n    \"url\": \"http://www.xyzcorp.com\",\n    \"description\": \"An international manufacturing company producing consumer electronics.\"\n}\n\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Employer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llckBnbWFpbC5jb20iLCJpYXQiOjE2OTU5MDM3NzYsImV4cCI6MTY5NTk5MDE3Nn0.Y_nLt-Cro1ARr4Q2ZCVjEvmwRMuq0MArSc8v1S82vDI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"XYZ Corporation\",\n    \"contactPersonName\": \"Jane Smith\",\n    \"contactPersonEmail\": \"jane@example.com\",\n    \"contactPersonPhone\": \"987-654-3210\",\n    \"address\": \"456 Elm Avenue, Townsville\",\n    \"companySize\": 200,\n    \"url\": \"http://www.xyzcorp.com\",\n    \"description\": \"An international manufacturing company producing consumer electronics.\"\n}\n\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/1/approve-employer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "1",
+                "approve-employer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"employerID is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.employerID).to.be.a('number');",
+                  "    pm.expect(responseData.employerID).to.be.at.least(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"contactPersonName is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.contactPersonName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"contactPersonName should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"contactPersonEmail is in a valid email format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.contactPersonEmail).to.exist.and.to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Employers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llckBnbWFpbC5jb20iLCJpYXQiOjE2OTU5MDM3NzYsImV4cCI6MTY5NTk5MDE3Nn0.Y_nLt-Cro1ARr4Q2ZCVjEvmwRMuq0MArSc8v1S82vDI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"XYZ Corporation\",\n    \"contactPersonName\": \"Jane Smith\",\n    \"contactPersonEmail\": \"jane@example.com\",\n    \"contactPersonPhone\": \"987-654-3210\",\n    \"address\": \"456 Elm Avenue, Townsville\",\n    \"companySize\": 200,\n    \"url\": \"http://www.xyzcorp.com\",\n    \"description\": \"An international manufacturing company producing consumer electronics modified. (modified)\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employers",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array with at least one element\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"employerID is a non-negative integer\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  responseData.forEach(function (employer) {",
+                  "    pm.expect(employer.employerID).to.be.a('number').and.to.be.at.least(0);",
+                  "  });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+                  "    responseData.forEach(function (employer) {",
+                  "        pm.expect(employer.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+                  "    });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Contact person email is in a valid email format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "    ",
+                  "    responseData.forEach(function (employer) {",
+                  "        pm.expect(employer.contactPersonEmail).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llckBnbWFpbC5jb20iLCJpYXQiOjE2OTU5MDM3NzYsImV4cCI6MTY5NTk5MDE3Nn0.Y_nLt-Cro1ARr4Q2ZCVjEvmwRMuq0MArSc8v1S82vDI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Employers",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employee",
+      "item": [
+        {
+          "name": "Add Employee",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"password\": \"secure123\",\n    \"dateOfBirth\": \"1985-09-25\",\n    \"gender\": \"Female\",\n    \"phoneNumber\": \"987-654-3210\",\n    \"address\": \"456 Elm Avenue, Townsville\",\n    \"position\": \"Marketing Specialist\",\n    \"department\": \"Marketing\",\n    \"employmentStartDate\": \"2021-03-10\",\n    \"employmentStatus\": \"Full-Time\",\n    \"emergencyContact\": \"John Doe\",\n    \"emergencyContactPhone\": \"123-456-7890\",\n    \"emergencyContactRelationship\": \"Sibling\",\n    \"otherInformation\": \"Prefers vegetarian food\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/1/employee",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "1",
+                "employee"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Employer ID is a non-zero integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.employerID).to.exist.and.to.be.a('number');",
+                  "    pm.expect(responseData.employerID).to.be.above(0, \"Value should be greater than zero\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"contactPersonName is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.contactPersonName).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Contact person email is in a valid email format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;",
+                  "",
+                  "    pm.expect(responseData.contactPersonEmail).to.match(emailRegex);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/1/employee/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "1",
+                "employee",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Smith\",\n    \"email\": \"jane.smith@example.com\",\n    \"password\": \"secure123\",\n    \"dateOfBirth\": \"1985-09-25\",\n    \"gender\": \"Female\",\n    \"phoneNumber\": \"987-654-3210\",\n    \"address\": \"456 Elm Avenue, Townsville\",\n    \"position\": \"Marketing Conteroller\",\n    \"department\": \"Marketing\",\n    \"employmentStartDate\": \"2021-03-10\",\n    \"employmentStatus\": \"Full-Time\",\n    \"emergencyContact\": \"John Doe\",\n    \"emergencyContactPhone\": \"123-456-7890\",\n    \"emergencyContactRelationship\": \"Sibling\",\n    \"otherInformation\": \"Prefers vegetarian food\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/1/employee/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "1",
+                "employee",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employees",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Email is in a valid format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "  responseData.forEach(function (employee) {",
+                  "    pm.expect(employee.email).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "  });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"The dateOfBirth field is in a valid date format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array');",
+                  "  ",
+                  "  responseData.forEach(function (employee) {",
+                  "    pm.expect(employee.dateOfBirth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/1/employee/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "1",
+                "employee",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Quotes",
+      "item": [
+        {
+          "name": "Add Quote",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlbXBsb3llckBnbWFpbC5jb20iLCJpYXQiOjE2OTU5MDM3NzYsImV4cCI6MTY5NTk5MDE3Nn0.Y_nLt-Cro1ARr4Q2ZCVjEvmwRMuq0MArSc8v1S82vDI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"serviceProvider\": {\n        \"serviceProviderID\": 102\n    },\n    \"employer\": {\n        \"employerID\": 2\n    },\n    \"contractDuration\": 12,\n    \"estimatedEmployeeCount\": 50,\n    \"paymentFrequency\": 1,\n    \"estimatedTotalCost\": 600,\n    \"negotiableAttributes\": \"estimatedTotalCost, contractDuration, paymentFrequency\",\n    \"additionalInformation\": \"Looking for a comprehensive fitness program including gym access, yoga, and wellness workshops.\"\n}\n\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/quote",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "quote"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Quotes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"employerID is a non-negative integer\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.employerID).to.be.a('number');",
+                  "    pm.expect(responseData.employerID).to.be.at.least(0);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Name is a non-empty string\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('object');",
+                  "  pm.expect(responseData.name).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"contactPersonName is a non-empty string\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData.contactPersonName).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Contact Person Email is in a valid email format\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('object');",
+                  "    pm.expect(responseData.contactPersonEmail).to.exist.and.to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/quote",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "quote"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Quotes",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Quotes",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n        \"employerID\": 3,\n        \"name\": \"Code Gen3\",\n        \"contactPersonName\": \"amangiiiiii\",\n        \"contactPersonEmail\": \"amangi@wso2.com\",\n        \"contactPersonPhone\": \"23142\"\n    }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Quotes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Response is an array\", function () {",
+                  "    const responseData = pm.response.json();",
+                  "    ",
+                  "    pm.expect(responseData).to.be.an('array');",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"Contact Person Email is in a valid email format\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "",
+                  "  pm.expect(responseData).to.be.an('array').and.to.have.lengthOf(1);",
+                  "  ",
+                  "  responseData.forEach(function (employer) {",
+                  "    pm.expect(employer.contactPersonEmail).to.exist.and.to.be.a('string');",
+                  "    pm.expect(employer.contactPersonEmail).to.match(/^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]{2,7}$/);",
+                  "  });",
+                  "});",
+                  "",
+                  "",
+                  "pm.test(\"companySize is a non-negative integer\", function () {",
+                  "  const responseData = pm.response.json();",
+                  "  ",
+                  "  pm.expect(responseData).to.be.an('array').and.to.have.lengthOf.at.least(1);",
+                  "  ",
+                  "  responseData.forEach(function(employer) {",
+                  "    pm.expect(employer.companySize).to.be.a('number').and.to.be.at.least(0);",
+                  "  });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/employer",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "employer"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Authenticate",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\" : \"sp2@gmail.com\",\n    \"password\" : \"sarangan\",\n    \"role\" : \"SERVICE_PROVIDER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/authenticate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "authenticate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register user",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\" : \"admin4@gmail.com\",\n    \"password\" : \"sarangan\",\n    \"role\" : \"ADMIN\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name  = "Employee")
@@ -18,6 +20,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long employeeID;
     private String firstName;
+
+    public void setEmployeeID(long employeeID) {
+        this.employeeID = employeeID;
+    }
+
     private String lastName;
     private String email;
     private Date dateOfBirth;
@@ -32,6 +39,22 @@ public class Employee {
     private String emergencyContactPhone;
     private String emergencyContactRelationship;
     private String otherInformation;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employee_services",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_provider_id"))
+    private List<ServiceProvider> services = new ArrayList<>();
+
+
+    public List<ServiceProvider> getServices() {
+        return services;
+    }
+
+    public void setServices(List<ServiceProvider> services) {
+        this.services = services;
+    }
 
     public String getFirstName() {
         return firstName;

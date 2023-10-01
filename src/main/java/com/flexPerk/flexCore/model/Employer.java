@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Table(name  = "Employer")
@@ -27,6 +30,22 @@ public class Employer {
     private String url;
     private String description;
     private boolean isApproved;
+
+    @ManyToMany
+    @JoinTable(
+            name = "employer_perks",
+            joinColumns = @JoinColumn(name = "employer_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_provider_id"))
+    private List<ServiceProvider> perks = new ArrayList<>();
+
+
+    public List<ServiceProvider> getPerks() {
+        return perks;
+    }
+
+    public void setPerks(List<ServiceProvider> perks) {
+        this.perks = perks;
+    }
 
     public void setEmployerID(long employerID) {
         this.employerID = employerID;

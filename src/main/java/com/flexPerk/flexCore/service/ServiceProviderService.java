@@ -45,8 +45,7 @@ public class ServiceProviderService {
     }
 
     public ServiceProvider updateServiceProvider(ServiceProvider updatedServiceProvider) {
-        ServiceProvider existingServiceProvider = serviceProviderRepository
-                .findById(updatedServiceProvider.getServiceProviderID()).orElse(null);
+        ServiceProvider existingServiceProvider = serviceProviderRepository.findById(updatedServiceProvider.getServiceProviderID()).orElse(null);
 
         if (existingServiceProvider != null) {
             existingServiceProvider.setName(updatedServiceProvider.getName());
@@ -63,22 +62,17 @@ public class ServiceProviderService {
     public List<ServiceProvider> getServiceProviders() {
 
         List<ServiceProvider> serviceProviderList = serviceProviderRepository.findAll();
-        return serviceProviderList.stream()
-                .filter(ServiceProvider::isEligible)
-                .toList();
+        return serviceProviderList.stream().filter(ServiceProvider::isEligible).toList();
     }
 
     public List<ServiceProvider> getPendingServiceProviders() {
 
         List<ServiceProvider> serviceProviderList = serviceProviderRepository.findAll();
-        return serviceProviderList.stream()
-                .filter(serviceProvider -> !serviceProvider.isEligible())
-                .toList();
+        return serviceProviderList.stream().filter(serviceProvider -> !serviceProvider.isEligible()).toList();
     }
 
     public ServiceProvider registerProvider(ServiceProvider serviceProvider) {
-        ServiceProvider existingServiceProvider = serviceProviderRepository
-                .findByName(serviceProvider.getName()).orElse(null);
+        ServiceProvider existingServiceProvider = serviceProviderRepository.findByName(serviceProvider.getName()).orElse(null);
 
         if (existingServiceProvider == null) {
             serviceProvider.setEligible(false);

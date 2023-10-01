@@ -64,6 +64,10 @@ public class User implements UserDetails {
         return false;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public boolean isEnabled() {
         return true;

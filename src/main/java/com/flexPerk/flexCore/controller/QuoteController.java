@@ -70,5 +70,20 @@ public class QuoteController {
         quoteService.createQuote(quote);
         return ResponseEntity.ok("Quote created successfully");
     }
+
+    @PostMapping("/create/{employerId}/{serviceProviderId}")
+    public ResponseEntity<Quote> createQuoteForServiceProvider(@PathVariable long employerId,
+                                                               @PathVariable long serviceProviderId,
+                                                               @RequestBody Quote quote) {
+        Quote createdQuote = quoteService.createQuoteForServiceProvider(employerId, serviceProviderId, quote);
+        return ResponseEntity.ok(createdQuote);
+    }
+
+    @PutMapping("/review/{quoteId}/{status}")
+    public ResponseEntity<Quote> reviewQuote(@PathVariable long quoteId,
+                                             @PathVariable Quote.QuoteStatus status) {
+        Quote reviewedQuote = quoteService.reviewQuote(quoteId, status);
+        return ResponseEntity.ok(reviewedQuote);
+    }
 }
 
